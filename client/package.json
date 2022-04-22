@@ -1,0 +1,19 @@
+{
+  "name": "client",
+  "private": true,
+  "version": "0.0.0",
+  "scripts": {
+    "dev": "nodemon",
+    "vite": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15",
+    "vite": "^2.9.5"
+  },
+  "nodemonConfig": {
+    "ignore": ["dist/*", "node_modules/*"],
+    "exec": "vite build"
+  }
+}
