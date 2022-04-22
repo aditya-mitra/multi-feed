@@ -13,7 +13,15 @@
     "vite": "^2.9.5"
   },
   "nodemonConfig": {
-    "ignore": ["dist/*", "node_modules/*"],
+    "ignore": [
+      "dist/*",
+      "node_modules/*"
+    ],
     "exec": "vite build"
+  },
+  "dependencies": {
+    "bulma": "^0.9.3",
+    "bulma-prefers-dark": "^0.1.0-beta.1",
+    "sass": "^1.50.1"
   }
 }

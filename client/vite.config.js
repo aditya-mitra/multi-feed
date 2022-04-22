@@ -1,7 +1,7 @@
 import { defineConfig } from "vite";
 
 export default defineConfig({
-	base: "/client",
+	base: "/client/",
 	build: {
 		outDir: "dist",
 	},
