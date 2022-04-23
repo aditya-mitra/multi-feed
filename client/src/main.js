@@ -2,11 +2,12 @@
 
 import { io } from "socket.io-client";
 
-import { changeConnected, changeInputState, addMessage } from "./utils";
+import { changeConnected, changeInputDisplay, addMessage } from "./utils";
 
-const state = {
+let state = {
 	isConnected: false,
 	username: "",
+	sessionId: null,
 };
 
 const socket = io({
@@ -15,30 +16,46 @@ const socket = io({
 });
 
 socket.on("connect", () => {
-	console.log("socket was connected");
-	changeConnected({ ...state, isConnected: socket.connected });
+	console.log("socket was connected with sid ");
+	state = { ...state, isConnected: socket.connected };
+	socket.emit("getsid");
+	changeConnected(state);
+});
+
+socket.on("getsid", (sid) => {
+	state.sessionId = sid;
+	console.log(state);
 });
 
 socket.on("message", (data) => {
 	addMessage(data.username, data.message);
 });
 
+socket.on("duplicate_username_disconnect", (sid) => {
+	if (state.sessionId && state.sessionId === sid) {
+		socket.disconnect();
+	}
+});
+
 socket.on("disconnect", () => {
 	console.log("socket was disconnected");
-	changeConnected({ ...state, isConnected: socket.connected });
+	state = { sessionId: null, username: "", isConnected: socket.connected };
+	changeConnected(state);
+	changeInputDisplay(state);
 });
 
 const sendButton = document.getElementById("send-button");
 
 sendButton.addEventListener("click", () => {
-	sendButton.disabled = true;
+	sendButton.setAttribute("disabled", "");
 
 	const text = document.getElementById("text-content");
 	console.log("the text content was ", text.value);
 	socket.emit("message", text.value);
 
 	text.value = "";
-	sendButton.disabled = false;
+	document.getElementById("text-content").focus();
+	sendButton.removeAttribute("disabled");
 });
 
 document.getElementById("submit-disconnect").addEventListener("click", () => {
@@ -53,9 +70,8 @@ document.getElementById("submit-disconnect").addEventListener("click", () => {
 	} else {
 		// set username in socket
 		state.username = usernameInput.value;
-		socket.connect();
+		if (!socket.connected) socket.connect();
 		socket.emit("setuser", state.username);
 	}
-
-	changeInputState(state);
+	changeInputDisplay(state);
 });

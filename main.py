@@ -18,17 +18,19 @@ app.add_middleware(
 )
 
 manager = ConnectionManager()
-
 sm = SocketManager(app=app)
 
-
 @sm.event
-def connect(sid, environ):
+async def connect(sid, environ):
     print(f"the client connected with sid {sid}")
 
+@sm.event
+async def getsid(sid):
+    await sm.emit('getsid', sid)
 
 @sm.event
 async def message(sid, data):
+    print(f'sid {sid}')
     session = await sm.get_session(sid)
     print(f"message from {session}")
     await sm.emit("message", {"username": session["username"], "message": data})
@@ -37,7 +39,12 @@ async def message(sid, data):
 @sm.event
 async def setuser(sid, data):
     # disconnect if user was already present
+    await sm.emit('duplicate_username_disconnect', 'the id was 123')
     await sm.save_session(sid, {"username": data})
+
+@sm.event
+async def disconnect(sid):
+    print(f'the client with sid {sid} got disconnected')
 
 
 @app.get("/")

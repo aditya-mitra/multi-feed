@@ -19,15 +19,15 @@ const usernameInput = document.getElementById("username-input");
 const textContent = document.getElementById("text-content");
 const sendButton = document.getElementById("send-button");
 
-export function changeInputState(state) {
+export function changeInputDisplay(state) {
 	if (state.username.length === 0) {
 		submitDisconnectInput.innerText = "Submit";
-		usernameInput.disabled = false;
-		textContent.setAttribute("disabled", "1");
-		sendButton.setAttribute("disabled", "1");
+		usernameInput.removeAttribute("disabled");
+		textContent.setAttribute("disabled", "");
+		sendButton.setAttribute("disabled", "");
 	} else {
 		submitDisconnectInput.innerText = "Disconnect";
-		usernameInput.disabled = true;
+		usernameInput.setAttribute("disabled", "");
 		textContent.removeAttribute("disabled");
 		sendButton.removeAttribute("disabled");
 	}
