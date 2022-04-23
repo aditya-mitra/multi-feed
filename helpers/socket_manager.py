@@ -33,17 +33,3 @@ class SocketManager:
     def event(self):
         return self._sio.event
 
-
-"""
-sm = SocketManager(app=app)
-
-@sm.event
-def connect(sid, environ):
-    print("connected ", sid, " and ", environ)
-
-@sm.event('message')
-async def message(sid, data):
-    print('the sid was ', sid, ' and the data was ',data);
-    await sm.emit('messge', {'hey':'john'})
-
-"""

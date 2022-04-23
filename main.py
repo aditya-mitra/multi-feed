@@ -5,7 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from helpers.broadcast import ConnectionManager
 
-# from helpers.socket_manager import SocketManager
+from helpers.socket_manager import SocketManager
 
 app = FastAPI()
 app.mount("/client", StaticFiles(directory="client/dist"), name="static")
@@ -19,11 +19,23 @@ app.add_middleware(
 
 manager = ConnectionManager()
 
+sm = SocketManager(app=app)
+
+@sm.event
+def connect(sid, environ):
+    print(f'the client connected with sid {sid}')
+    # print("connected ", sid, " and ", environ)
+
+@sm.event
+async def message(sid, data):
+    print('the client sent message')
+    print('the sid', sid, 'and data ', data)
+    await sm.emit('message', 'how\'s the weather')
+
 
 @app.get("/")
 async def index_page():
     return FileResponse("client/dist/index.html")
-
 
 @app.websocket("/feed/{username}/ws")
 async def websocket_endpoint(websocket: WebSocket, username: str):
