@@ -17,11 +17,13 @@
       "dist/*",
       "node_modules/*"
     ],
-    "exec": "vite build"
+    "exec": "vite build",
+    "ext": "html,js"
   },
   "dependencies": {
     "bulma": "^0.9.3",
     "bulma-prefers-dark": "^0.1.0-beta.1",
-    "sass": "^1.50.1"
+    "sass": "^1.50.1",
+    "socket.io-client": "^4.4.1"
   }
 }
