@@ -43,7 +43,7 @@ export function addMessage(author, text) {
 
 	child.innerHTML = `
   <div class="block my-1">
-    <article class="tile is-child notification is-primary">
+    <article class="tile is-child notification is-info">
       <p class="title">${author}</p>
       <p class="subtitle">${text}</p>
     </article>
