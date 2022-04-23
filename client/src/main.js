@@ -1,39 +1,65 @@
+// import "./styles/custom.scss"
+
 import { io } from "socket.io-client";
 
-const SERVER_URL = "http://localhost:8000/";
+const connectAttemptDiv = document.getElementById("connect-attempt");
+const connectSuccessDiv = document.getElementById("connect-success");
 
-const username = Date.now().toString();
+function changeConnected(isConnected) {
+	if (!isConnected) {
+		connectAttemptDiv.style.display = "block";
+		connectSuccessDiv.style.display = "none";
+	} else {
+		connectAttemptDiv.style.display = "none";
+		connectSuccessDiv.style.display = "block";
+	}
+}
 
-// const socket = io(SERVER_URL, {
-// 	path: `/feed/${username}/ws/`,
-// 	transports: ["websocket"],
-// });
+changeConnected(false);
 
-// socket.io.on("reconnect_error", (err) => {
-// 	console.log(err);
-// 	socket.close();
-// });
+function addMessage(author, text) {
+	const date = new Date();
+	const child = document.createElement("div");
+	child.id = `${date.getHours}-${date.getMinutes}-${date.getSeconds}`;
+
+	child.innerHTML = `
+  <div class="block my-1">
+    <article class="tile is-child notification is-primary">
+      <p class="title">${author}</p>
+      <p class="subtitle">${text}</p>
+    </article>
+  </div>
+  `;
+
+	document.getElementById("messages-container").appendChild(child);
+}
+
 const socket = io({
 	transports: ["websocket"],
-  path: '/ws/socket.io/'
+	path: "/ws/socket.io/",
 });
 
 socket.on("connect", () => {
 	console.log("socket was connected");
+	changeConnected(true);
 });
 
 // const ws = new WebSocket(`ws://localhost:8000/feed/${username}/ws`);
 
 socket.on("message", (details) => {
-	console.log("message event", details);
+	addMessage("anybody", details);
 });
 
-const button = document.getElementById("send-button");
-// console.log("button was", button);
+const sendButton = document.getElementById("send-button");
 
-button.addEventListener("click", () => {
-	console.log("button clicked");
-	socket.emit("message", `The time is ${new Date().getMinutes()}`);
+sendButton.addEventListener("click", () => {
+	sendButton.disabled = true;
 
+	const text = document.getElementById("text-content");
+	console.log("the text content was ", text.value);
+	socket.emit("message", text.value);
+
+	text.value = "";
+	sendButton.disabled = false;
 	// ws.send(`The time is ${new Date().getMinutes()}`);
 });

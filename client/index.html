@@ -12,21 +12,24 @@
 
 <body>
   <div class="container">
+    <div id="connect-attempt" class="block notification is-danger">
+      Attempting connection ...
+    </div>
+    <div id="connect-success" class="block notification is-success">
+      Connected!
+    </div>
+
     <div class="tile is-ancestor">
-      <div class="tile is-vertical">
-        <div class="tile is-parent">
-          <article class="tile is-child notification is-primary">
-            <!-- <p class="title">You</p> -->
-            <p class="subtitle">You</p>
-            <div class="content">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Aperiam eos esse assumenda quis corporis accusantium blanditiis odio accusamus eaque optio facere, in dolorem explicabo suscipit veniam doloremque similique ipsum nobis!
-            </div>
-          </article>
+      <div class="tile">
+        <div class="tile is-parent is-vertical" id="messages-container">
         </div>
       </div>
     </div>
-    <textarea class="textarea is-primary" placeholder="Primary textarea"></textarea>
+
+    <textarea id="text-content" class="textarea is-primary" placeholder="Primary textarea"></textarea>
     <button class="button" id="send-button">Send</button>
+
+
   </div>
   <script type="module" src="/src/main.js"></script>
 </body>

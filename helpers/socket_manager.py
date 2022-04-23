@@ -32,4 +32,3 @@ class SocketManager:
     @property
     def event(self):
         return self._sio.event
-
