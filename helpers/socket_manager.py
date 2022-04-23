@@ -32,3 +32,11 @@ class SocketManager:
     @property
     def event(self):
         return self._sio.event
+
+    @property
+    def save_session(self):
+        return self._sio.save_session
+
+    @property
+    def get_session(self):
+        return self._sio.get_session

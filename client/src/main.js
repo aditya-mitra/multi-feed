@@ -35,12 +35,13 @@ function addMessage(author, text) {
 }
 
 const socket = io({
-	transports: ["websocket"],
-	path: "/ws/socket.io/",
+	transports: ["websocket", "polling"],
+	path: "/ws/socket.io/"
 });
 
 socket.on("connect", () => {
 	console.log("socket was connected");
+  socket.emit("setuser", `happy-user-1`)
 	changeConnected(true);
 });
 

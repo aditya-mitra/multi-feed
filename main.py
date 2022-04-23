@@ -24,12 +24,17 @@ sm = SocketManager(app=app)
 @sm.event
 def connect(sid, environ):
     print(f"the client connected with sid {sid}")
-    # print("connected ", sid, " and ", environ)
 
 
 @sm.event
 async def message(sid, data):
+    session = await sm.get_session(sid)
+    print(f"message from {session}")
     await sm.emit("message", data)
+
+@sm.event
+async def setuser(sid, data):
+    await sm.save_session(sid, {'username': data})
 
 
 @app.get("/")
