@@ -14,19 +14,20 @@ export function changeConnected(state) {
 	}
 }
 
-const submitDisconnectInput = document.getElementById("submit-disconnect");
+const submitResetInput = document.getElementById("submit-reset");
 const usernameInput = document.getElementById("username-input");
 const textContent = document.getElementById("text-content");
 const sendButton = document.getElementById("send-button");
 
 export function changeInputDisplay(state) {
 	if (state.username.length === 0) {
-		submitDisconnectInput.innerText = "Submit";
+		submitResetInput.innerText = "Submit";
 		usernameInput.removeAttribute("disabled");
+		usernameInput.value = "";
 		textContent.setAttribute("disabled", "");
 		sendButton.setAttribute("disabled", "");
 	} else {
-		submitDisconnectInput.innerText = "Disconnect";
+		submitResetInput.innerText = "Reset";
 		usernameInput.setAttribute("disabled", "");
 		textContent.removeAttribute("disabled");
 		sendButton.removeAttribute("disabled");

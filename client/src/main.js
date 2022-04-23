@@ -16,15 +16,15 @@ const socket = io({
 });
 
 socket.on("connect", () => {
-	console.log("socket was connected with sid ");
+	console.log("socket was connected");
 	state = { ...state, isConnected: socket.connected };
 	socket.emit("getsid");
 	changeConnected(state);
 });
 
 socket.on("getsid", (sid) => {
-	state.sessionId = sid;
-	console.log(state);
+	if (!state.sessionId) state.sessionId = sid;
+	// console.log(state.sessionId);
 });
 
 socket.on("message", (data) => {
@@ -32,6 +32,7 @@ socket.on("message", (data) => {
 });
 
 socket.on("duplicate_username_disconnect", (sid) => {
+	console.log("local state id", state.sessionId, " and server sent", sid);
 	if (state.sessionId && state.sessionId === sid) {
 		socket.disconnect();
 	}
@@ -58,7 +59,7 @@ sendButton.addEventListener("click", () => {
 	sendButton.removeAttribute("disabled");
 });
 
-document.getElementById("submit-disconnect").addEventListener("click", () => {
+document.getElementById("submit-reset").addEventListener("click", () => {
 	const usernameInput = document.getElementById("username-input");
 
 	if (usernameInput.value?.length === 0) return;
@@ -70,7 +71,7 @@ document.getElementById("submit-disconnect").addEventListener("click", () => {
 	} else {
 		// set username in socket
 		state.username = usernameInput.value;
-		if (!socket.connected) socket.connect();
+		if (!state.isConnected) socket.connect();
 		socket.emit("setuser", state.username);
 	}
 	changeInputDisplay(state);
