@@ -2,53 +2,30 @@
 
 import { io } from "socket.io-client";
 
-const connectAttemptDiv = document.getElementById("connect-attempt");
-const connectSuccessDiv = document.getElementById("connect-success");
+import { changeConnected, changeInputState, addMessage } from "./utils";
 
-function changeConnected(isConnected) {
-	if (!isConnected) {
-		connectAttemptDiv.style.display = "block";
-		connectSuccessDiv.style.display = "none";
-	} else {
-		connectAttemptDiv.style.display = "none";
-		connectSuccessDiv.style.display = "block";
-	}
-}
-
-changeConnected(false);
-
-function addMessage(author, text) {
-	const date = new Date();
-	const child = document.createElement("div");
-	child.id = `${date.getHours}-${date.getMinutes}-${date.getSeconds}`;
-
-	child.innerHTML = `
-  <div class="block my-1">
-    <article class="tile is-child notification is-primary">
-      <p class="title">${author}</p>
-      <p class="subtitle">${text}</p>
-    </article>
-  </div>
-  `;
-
-	document.getElementById("messages-container").appendChild(child);
-}
+const state = {
+	isConnected: false,
+	username: "",
+};
 
 const socket = io({
-	transports: ["websocket", "polling"],
-	path: "/ws/socket.io/"
+	transports: ["websocket"],
+	path: "/ws/socket.io/",
 });
 
 socket.on("connect", () => {
 	console.log("socket was connected");
-  socket.emit("setuser", `happy-user-1`)
-	changeConnected(true);
+	changeConnected({ ...state, isConnected: socket.connected });
 });
 
-// const ws = new WebSocket(`ws://localhost:8000/feed/${username}/ws`);
+socket.on("message", (data) => {
+	addMessage(data.username, data.message);
+});
 
-socket.on("message", (details) => {
-	addMessage("anybody", details);
+socket.on("disconnect", () => {
+	console.log("socket was disconnected");
+	changeConnected({ ...state, isConnected: socket.connected });
 });
 
 const sendButton = document.getElementById("send-button");
@@ -62,5 +39,23 @@ sendButton.addEventListener("click", () => {
 
 	text.value = "";
 	sendButton.disabled = false;
-	// ws.send(`The time is ${new Date().getMinutes()}`);
+});
+
+document.getElementById("submit-disconnect").addEventListener("click", () => {
+	const usernameInput = document.getElementById("username-input");
+
+	if (usernameInput.value?.length === 0) return;
+
+	if (state.username.length > 0) {
+		// disconnect socket
+		state.username = "";
+		socket.disconnect();
+	} else {
+		// set username in socket
+		state.username = usernameInput.value;
+		socket.connect();
+		socket.emit("setuser", state.username);
+	}
+
+	changeInputState(state);
 });

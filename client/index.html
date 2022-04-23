@@ -12,11 +12,20 @@
 
 <body>
   <div class="container">
-    <div id="connect-attempt" class="block notification is-danger">
-      Attempting connection ...
-    </div>
-    <div id="connect-success" class="block notification is-success">
-      Connected!
+    <div class="box">
+      <div id="connect-attempt-success" class="block notification is-danger">
+        Attempting connection ...
+      </div>
+      <div class="field is-grouped">
+        <div class="control is-expanded">
+          <input id="username-input" class="input" type="text" placeholder="Enter username">
+        </div>
+        <div class="control">
+          <button class="button is-light" id="submit-disconnect">
+            Submit
+          </button>
+        </div>
+      </div>
     </div>
 
     <div class="tile is-ancestor">
@@ -26,8 +35,8 @@
       </div>
     </div>
 
-    <textarea id="text-content" class="textarea is-primary" placeholder="Primary textarea"></textarea>
-    <button class="button" id="send-button">Send</button>
+    <textarea id="text-content" disabled class="textarea is-primary" placeholder="Primary textarea"></textarea>
+    <button class="button" disabled id="send-button">Send</button>
 
 
   </div>

@@ -2,6 +2,7 @@ from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
 from fastapi.middleware.cors import CORSMiddleware
+from requests import session
 
 from helpers.broadcast import ConnectionManager
 from helpers.socket_manager import SocketManager
@@ -30,11 +31,13 @@ def connect(sid, environ):
 async def message(sid, data):
     session = await sm.get_session(sid)
     print(f"message from {session}")
-    await sm.emit("message", data)
+    await sm.emit("message", {"username": session["username"], "message": data})
+
 
 @sm.event
 async def setuser(sid, data):
-    await sm.save_session(sid, {'username': data})
+    # disconnect if user was already present
+    await sm.save_session(sid, {"username": data})
 
 
 @app.get("/")
