@@ -4,7 +4,6 @@ from fastapi.responses import FileResponse
 from fastapi.middleware.cors import CORSMiddleware
 from requests import session
 
-from helpers.broadcast import ConnectionManager
 from helpers.socket_manager import SocketManager
 
 app = FastAPI()
@@ -17,7 +16,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-manager = ConnectionManager()
 sm = SocketManager(app=app)
 
 usernames = dict()
@@ -60,16 +58,3 @@ def disconnect(sid):
 @app.get("/")
 async def index_page():
     return FileResponse("client/dist/index.html")
-
-
-@app.websocket("/feed/{username}/ws")
-async def websocket_endpoint(websocket: WebSocket, username: str):
-    await manager.connect(websocket)
-    try:
-        while True:
-            data = await websocket.receive_text()
-            print("data was ", data)
-            await manager.broadcast(f"Client #{username} says: {data}")
-    except WebSocketDisconnect:
-        manager.disconnect(websocket)
-        await manager.broadcast(f"Client #{username} left the chat")
