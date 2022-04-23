@@ -58,3 +58,7 @@ def disconnect(sid):
 @app.get("/")
 async def index_page():
     return FileResponse("client/dist/index.html")
+
+@app.get('/best')
+async def best_page():
+    return {'working': 'fine'}
