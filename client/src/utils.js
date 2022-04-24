@@ -5,7 +5,7 @@ export function changeConnected(state) {
 		state.isConnected = false;
 		connectStatusDiv.classList.remove("is-success");
 		connectStatusDiv.classList.add("is-danger");
-		connectStatusDiv.innerText = "Not connected ...";
+		connectStatusDiv.innerText = "Enter a username and please wait as socket gets connected ...";
 	} else {
 		state.isConnected = true;
 		connectStatusDiv.classList.remove("is-danger");
@@ -27,7 +27,7 @@ export function changeInputDisplay(state) {
 		textContent.setAttribute("disabled", "");
 		sendButton.setAttribute("disabled", "");
 	} else {
-		submitResetInput.innerText = "Reset";
+		submitResetInput.innerText = "Disconnect";
 		usernameInput.setAttribute("disabled", "");
 		textContent.removeAttribute("disabled");
 		sendButton.removeAttribute("disabled");

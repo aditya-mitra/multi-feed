@@ -1,4 +1,4 @@
-import './assets/custom.scss'
+import "./assets/custom.scss";
 
 import { io } from "socket.io-client";
 
@@ -17,6 +17,10 @@ const socket = io({
 
 socket.on("connect", () => {
 	console.log("socket was connected");
+	if (state.username.length === 0) {
+		socket.disconnect();
+		return;
+	}
 	state = { ...state, isConnected: socket.connected };
 	socket.emit("getsid");
 	changeConnected(state);
