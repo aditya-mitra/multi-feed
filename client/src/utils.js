@@ -21,13 +21,13 @@ const sendButton = document.getElementById("send-button");
 
 export function changeInputDisplay(state) {
 	if (state.username.length === 0) {
-		submitResetInput.innerText = "Submit";
+		submitResetInput.innerText = "Login";
 		usernameInput.removeAttribute("disabled");
 		usernameInput.value = "";
 		textContent.setAttribute("disabled", "");
 		sendButton.setAttribute("disabled", "");
 	} else {
-		submitResetInput.innerText = "Disconnect";
+		submitResetInput.innerText = "Logout";
 		usernameInput.setAttribute("disabled", "");
 		textContent.removeAttribute("disabled");
 		sendButton.removeAttribute("disabled");

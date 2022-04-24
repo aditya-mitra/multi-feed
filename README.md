@@ -1,5 +1,5 @@
 # Feed System
 
-Using FastAPI and Socket.io
+Using FastAPI, Redis and Socket.io
 
-[Deta does not support websockets](https://docs.deta.sh/docs/micros/faqs_micros/#do-micros-support-websockets)
+Deployed to [Heroku](https://multi-feed-system.herokuapp.com/) because [Deta does not support websockets](https://docs.deta.sh/docs/micros/faqs_micros/#do-micros-support-websockets)
