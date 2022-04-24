@@ -45,7 +45,9 @@ export function addMessage(author, text) {
   <div class="block my-1">
     <article class="tile is-child notification is-info">
       <p class="title">${author}</p>
-      <p class="subtitle">${text}</p>
+      <p class="subtitle">
+	  	<pre class="is-family-secondary is-size-4" style="background-color: inherit;">${text}</pre>
+	  </p>
     </article>
   </div>
   `;
