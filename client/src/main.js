@@ -1,4 +1,4 @@
-// import "./styles/custom.scss"
+import './assets/custom.scss'
 
 import { io } from "socket.io-client";
 
