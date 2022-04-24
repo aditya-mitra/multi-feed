@@ -1,25 +1,19 @@
-from typing import Union
-
 import socketio
 from fastapi import FastAPI
+from os import getenv
 
 
 class SocketManager:
     def __init__(
         self,
         app: FastAPI,
-        mount_location: str = "/ws",
-        socketio_path: str = "socket.io",
-        cors_allowed_origins: Union[str, list] = "*",
-        async_mode: str = "asgi",
     ) -> None:
-        self._sio = socketio.AsyncServer(
-            async_mode=async_mode, cors_allowed_origins=cors_allowed_origins
-        )
+        mgr = socketio.AsyncRedisManager(url=getenv('REDIS_URI'))
+        self._sio = socketio.AsyncServer(client_manager=mgr, async_mode="asgi", cors_allowed_origins="*")
         self._app = socketio.ASGIApp(
-            socketio_server=self._sio, socketio_path=socketio_path
+            socketio_server=self._sio, socketio_path="socket.io"
         )
-        app.mount(mount_location, self._app)
+        app.mount("/ws", self._app)
 
     @property
     def on(self):
@@ -40,3 +34,4 @@ class SocketManager:
     @property
     def get_session(self):
         return self._sio.get_session
+
